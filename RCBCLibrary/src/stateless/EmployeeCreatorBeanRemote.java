@@ -12,5 +12,11 @@ import java.util.List;
 public interface EmployeeCreatorBeanRemote {
 
     public List<EmployeeEntity> retrieveAllEmployeeEntity();
+
+    public EmployeeEntity retrieveStaffByUsername(String username) ;
+
+    public EmployeeEntity staffLogin(String username, String password);
+
+    public Long createEmployee(EmployeeEntity newEmployeeEntity);
     
 }

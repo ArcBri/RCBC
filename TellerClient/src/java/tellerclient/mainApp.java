@@ -29,7 +29,7 @@ class mainApp {
     public mainApp() {
     }
     
-    public void run(){
+    public void run() throws Exception{
         Scanner sc = new Scanner(System.in);       
         List<EmployeeEntity> employeeEntities = employeebean.retrieveAllEmployeeEntity();  
         
@@ -44,13 +44,9 @@ class mainApp {
         String user=sc.nextLine();
         System.out.println("Enter password");
         String pass=sc.nextLine();
-        /*while(employee.logIn(user, pass)==false){
-            System.err.println("Please try again");
-            System.err.println("Enter Username:");
-            user=sc.nextLine();
-            System.err.println("Enter password");
-            pass=sc.nextLine();
-        }
+        EmployeeEntity currentUser=employeebean.staffLogin(user, pass);
+        employeeEntities.add(currentUser);
+
         System.err.println("Welcome" + user+ ".");
         
         boolean finished=false;
@@ -60,8 +56,8 @@ class mainApp {
             System.err.println("2) View Account");
             System.err.println("3) Withdraw");
             System.err.println("4) Deposit");
-            if(employee.getAccess()==2){
-                System.err.println("5) New Employee");
+            if(currentUser.getAccess()==1){
+                System.err.println("5) Create new Employee");
             }
             System.err.println("0) End");
             
@@ -71,10 +67,31 @@ class mainApp {
                     finished=true;
                     break;
                 case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    System.out.println("Enter first name");
+                    String firstName=sc.nextLine();
+                    System.out.println("Enter last name");
+                    String lastName=sc.nextLine();
+                    System.out.println("Enter username");
+                    String userName=sc.nextLine();
+                    System.out.println("Enter password");
+                    String password=sc.nextLine();
+                    System.out.println("Enter 1 for manager access, 0 otherwise");
+                    int access=sc.nextInt();
+                    EmployeeEntity newUser= new EmployeeEntity(firstName,lastName,userName,password,access);
+                    employeebean.createEmployee(newUser);
+                    break;
                     //enter details
             }
                     
-        }*/
+        }
     }
 
     private EmployeeCreatorBeanRemote lookupEmployeeCreatorBeanRemote() {
