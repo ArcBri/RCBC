@@ -76,7 +76,9 @@ class mainApp {
                     break;
                 case 5:
                     System.out.println("Enter first name");
-                    String firstName=sc.nextLine();
+                    String firstName=sc.next();
+                    System.out.println("press Enter ");
+                    sc.next();
                     System.out.println("Enter last name");
                     String lastName=sc.nextLine();
                     System.out.println("Enter username");

@@ -11,8 +11,6 @@ import javax.ejb.Local;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -45,7 +43,7 @@ public class EmployeeCreatorBean implements EmployeeCreatorBeanRemote, EmployeeC
     @Override
     public EmployeeEntity retrieveStaffByUsername(String username)
     {
-        Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.username = :inUsername");
+        Query query = em.createQuery("SELECT e FROM EmployeeEntity e WHERE e.userName = :inUsername");
         query.setParameter("inUsername", username);
         
         {
@@ -55,18 +53,20 @@ public class EmployeeCreatorBean implements EmployeeCreatorBeanRemote, EmployeeC
 
     }
     @Override
-    public EmployeeEntity staffLogin(String username, String password)
-    {
+    public EmployeeEntity staffLogin(String username, String password){
+    
        
-        {
+        
             EmployeeEntity staffEntity = retrieveStaffByUsername(username);
             
             if(staffEntity.getPassword().equals(password))
             {                
                 return staffEntity;
+            }else{
+                return staffEntity;
             }
 
-        }
+        
     }
         @Override
     public Long createEmployee(EmployeeEntity newEmployeeEntity){
