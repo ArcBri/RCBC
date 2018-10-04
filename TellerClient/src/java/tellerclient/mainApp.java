@@ -5,6 +5,7 @@
  */
 package tellerclient;
 
+import Entity.Account;
 import Entity.EmployeeEntity;
 import java.util.List;
 import java.util.Scanner;
@@ -14,6 +15,7 @@ import javax.ejb.EJB;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import stateful.bankingBeanRemote;
 import stateless.EmployeeCreatorBeanRemote;
 
 
@@ -23,7 +25,13 @@ import stateless.EmployeeCreatorBeanRemote;
  */
 class mainApp {
     @EJB
-    private EmployeeCreatorBeanRemote employeebean = lookupEmployeeCreatorBeanRemote();
+    private final EmployeeCreatorBeanRemote employeebean = lookupEmployeeCreatorBeanRemote();
+    
+    @EJB
+    private bankingBeanRemote bank = lookupbankingBeanRemote();
+    
+    Long accountId;
+    Account account;
 
 
     public mainApp() {
@@ -67,12 +75,33 @@ class mainApp {
                     finished=true;
                     break;
                 case 1:
+                    System.out.println("Enter Name");
+                    String name=sc.next();
+                    sc.nextLine();
+                    System.out.println("Loading");
+                    System.out.println("Enter initial deposit");
+                    int balance=sc.nextInt();
+                    System.out.println("Enter PIN");
+                    int pin=sc.nextInt();
+                    account = new Account(name,balance,pin);
+                    accountId=bank.createAccount(account);
+                    System.out.println("success");
                     break;
                 case 2:
+                    account=bank.findAccount(accountId);
+                    System.out.println("Remaining balance is: $"+account.getBalance()) ;
                     break;
                 case 3:
+                    System.out.println("Enter Withdraw Amount");
+                    int amount=sc.nextInt();
+                    bank.withdraw(accountId, amount);
+                    System.out.println("Success");
                     break;
                 case 4:
+                    System.out.println("Enter Deposit Amount");
+                    int amt=sc.nextInt();
+                    bank.deposit(accountId, amt);
+                    System.out.println("Success");
                     break;
                 case 5:
                     System.out.println("Enter first name");
@@ -100,6 +129,16 @@ class mainApp {
         try {
             Context c = new InitialContext();
             return (EmployeeCreatorBeanRemote) c.lookup("java:comp/env/EmployeeCreatorBeanRemote");
+        } catch (NamingException ne) {
+            Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
+            throw new RuntimeException(ne);
+        }
+    }
+
+    private bankingBeanRemote lookupbankingBeanRemote() {
+        try {
+            Context c = new InitialContext();
+            return (bankingBeanRemote) c.lookup("java:comp/env/bankingBean");
         } catch (NamingException ne) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, "exception caught", ne);
             throw new RuntimeException(ne);

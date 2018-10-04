@@ -6,4 +6,9 @@
     <ejb-ref-type>Session</ejb-ref-type>
     <remote>stateless.EmployeeCreatorBeanRemote</remote>
   </ejb-ref>
+  <ejb-ref>
+    <ejb-ref-name>bankingBean</ejb-ref-name>
+    <ejb-ref-type>Session</ejb-ref-type>
+    <remote>stateful.bankingBeanRemote</remote>
+  </ejb-ref>
 </application-client>
