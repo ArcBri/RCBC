@@ -21,5 +21,7 @@ public interface bankingBeanRemote {
     public void deposit(Long id, int amount);
 
     public Account findAccount(Long Id);
+
+    public Account retrieveAccountbyName(String name);
     
 }

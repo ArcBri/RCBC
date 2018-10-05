@@ -10,6 +10,7 @@ import javax.ejb.Remote;
 import javax.ejb.Stateful;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -45,6 +46,18 @@ public class bankingBean implements bankingBeanRemote {
         balance=balance-amount;
         account.setBalance(balance);
         updateAccount(account);
+    }
+    @Override
+        public Account retrieveAccountbyName(String name)
+    {
+        Query query = em.createQuery("SELECT a FROM Account a WHERE a.name = :inName");
+        query.setParameter("inName", name);
+        
+        {
+            return (Account)query.getSingleResult();
+        }
+
+
     }
     @Override
     public void deposit(Long id, int amount){

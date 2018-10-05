@@ -7,6 +7,7 @@ package tellerclient;
 
 import Entity.Account;
 import Entity.EmployeeEntity;
+import static java.lang.Long.reverse;
 import java.util.List;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -30,8 +31,9 @@ class mainApp {
     @EJB
     private bankingBeanRemote bank = lookupbankingBeanRemote();
     
-    Long accountId;
+    Long accountId = new Long(99999);
     Account account;
+    Long prevacctId= new Long(997);
 
 
     public mainApp() {
@@ -61,7 +63,7 @@ class mainApp {
         while(finished==false){
             System.err.println("Choose Option");
             System.err.println("1) New Customer");
-            System.err.println("2) View Account");
+            System.err.println("2) View Available Account Balance");
             System.err.println("3) Withdraw");
             System.err.println("4) Deposit");
             if(currentUser.getAccess()==1){
@@ -81,14 +83,30 @@ class mainApp {
                     System.out.println("Loading");
                     System.out.println("Enter initial deposit");
                     int balance=sc.nextInt();
-                    System.out.println("Enter PIN");
+                    System.out.println("Enter account PIN");
                     int pin=sc.nextInt();
                     account = new Account(name,balance,pin);
                     accountId=bank.createAccount(account);
                     System.out.println("success");
                     break;
                 case 2:
-                    account=bank.findAccount(accountId);
+                    if(accountId.equals(prevacctId)){
+                       System.out.println("Change account? Enter 0 for yes, 1 for no ");                    
+                        if(sc.nextInt()==0){
+                        prevacctId=reverse(prevacctId);
+                        System.out.print("Enter holder's name:");
+                    //String namae=sc.nextLine();
+                    account=bank.retrieveAccountbyName(sc.next());
+                     }else{
+                            account=bank.findAccount(accountId);
+                        }
+                    }else{
+                    System.out.print("Enter holder's name:");
+                    //String namae=sc.nextLine();
+                    account=bank.retrieveAccountbyName(sc.next());
+                    }
+                    accountId=account.getAccountId();
+                    prevacctId=accountId;
                     System.out.println("Remaining balance is: $"+account.getBalance()) ;
                     break;
                 case 3:
@@ -106,8 +124,7 @@ class mainApp {
                 case 5:
                     System.out.println("Enter first name");
                     String firstName=sc.next();
-                    System.out.println("press Enter ");
-                    sc.next();
+                    sc.nextLine();
                     System.out.println("Enter last name");
                     String lastName=sc.nextLine();
                     System.out.println("Enter username");
